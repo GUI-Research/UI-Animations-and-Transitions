@@ -10,6 +10,8 @@ class GUIAnimatedImage : public GUIElement
 public:
 	GUIAnimatedImage();
 	virtual ~GUIAnimatedImage();
+
+
 };
 
 #endif // !__GUIANIMATEDIMAGE_H__

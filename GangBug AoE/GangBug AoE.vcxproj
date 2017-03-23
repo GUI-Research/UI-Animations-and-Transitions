@@ -177,6 +177,7 @@
   <ItemGroup>
     <ClCompile Include="Defs.cpp" />
     <ClCompile Include="GB_Rectangle.cpp" />
+    <ClCompile Include="GUIAnimatedImage.cpp" />
     <ClCompile Include="GUIAutoLabel.cpp" />
     <ClCompile Include="GUIButton.cpp" />
     <ClCompile Include="GUIElement.cpp" />
@@ -203,6 +204,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GUIAnimatedImage.h" />
     <ClInclude Include="GUIAutoLabel.h" />
     <ClInclude Include="GUIButton.h" />
     <ClInclude Include="GUIElement.h" />

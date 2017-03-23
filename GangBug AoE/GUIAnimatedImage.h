@@ -3,6 +3,8 @@
 
 #include "GUIElement.h"
 
+class Animation;
+
 class GUIAnimatedImage : public GUIElement
 {
 public:

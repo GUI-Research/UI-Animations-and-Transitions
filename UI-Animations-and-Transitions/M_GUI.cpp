@@ -38,22 +38,18 @@ bool M_GUI::Start()
 {
 	atlas = app->tex->Load("gui/atlas.png");
 
-	/*GUIImage* img = new GUIImage();
+	GUIImage* img = new GUIImage();
 	img->SetRectangle(0, 0, 231, 71);
 	img->SetSection(0, 110, 231, 71);
 	img->SetInteractive(true);		   
 	img->SetCanFocus(true);			   
 	guiList.push_back(img);			   
 
-	GUILabel* label = new GUILabel();
+	GUILabel* label = CreateLabel({100, 100, 200, 200}, MEDIUM, "Hello world!");
 	label->SetInteractive(true);
 	label->SetCanFocus(true);
-	label->SetText("Hello World!");
 	label->CenterX();
-	guiList.push_back(label);
 
-	GUIButton* button = new GUIButton(GB_Rectangle<int>(0, 110, 231, 71), GB_Rectangle<int>(416, 171, 231, 71), GB_Rectangle<int>(647, 171, 231, 71));
-	guiList.push_back(button);*/
 	
 	
 

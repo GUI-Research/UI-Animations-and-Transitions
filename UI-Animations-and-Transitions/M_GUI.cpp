@@ -13,6 +13,7 @@
 #include "GUIInputText.h"
 #include "GUIAutoLabel.h"
 #include "GUIMouse.h"
+#include "GUIAnimatedImage.h"
 
 
 
@@ -53,39 +54,27 @@ bool M_GUI::Start()
 
 	GUIButton* button = new GUIButton(GB_Rectangle<int>(0, 110, 231, 71), GB_Rectangle<int>(416, 171, 231, 71), GB_Rectangle<int>(647, 171, 231, 71));
 	guiList.push_back(button);*/
-	GUIInputText * input2 = new GUIInputText();
-	input2->image->SetRectangle(0, 300, 231, 71);
-	input2->label->SetLocalPos(0, 300);
-	input2->SetRectangle(0, 300, 231, 71);
-	guiList.push_back(input2);
-	guiList.push_back(input2->image);
-	guiList.push_back(input2->label);
-
-
-	GUIInputText * input = new GUIInputText();	
-	guiList.push_back(input);
-	guiList.push_back(input->image);
-	guiList.push_back(input->label);
+	
 	
 
 	curs = new GUIMouse({ 0, 0 }, { 994,728, 25, 23 });
 	//cursor  ------------------------------------------
 	//curs = app->gui->createelement(uicursor, sdl_rect{ 994,728, 25, 23 }, p2point<int>{ 0, 0 },true);
 	//curs->setlistener(this);
-
+	
 	lastFrameMS = new GUIAutoLabel<uint32>({ 0,0,30,30 }, &app->last_frame_ms);
 	fps = new GUIAutoLabel<uint32>({ 0,30,30,30 }, &app->frames_on_last_update);
-	debugGuiList.push_back(lastFrameMS);
-	debugGuiList.push_back(fps);
-	debugGuiList.push_back(CreateLabel({ 30,0,30,30 }, MEDIUM, "ms"));
-	debugGuiList.push_back(CreateLabel({ 30,30,30,30 }, MEDIUM, "fps"));
+	guiList.push_back(lastFrameMS);
+	guiList.push_back(fps);
+	CreateLabel({ 30,0,30,30 }, MEDIUM, "ms");
+	CreateLabel({ 30,30,30,30 }, MEDIUM, "fps");
 
 	
 	xMouse = new GUILabel("", SMALL);
 	yMouse = new GUILabel("", SMALL);
 
-	debugGuiList.push_back(xMouse);
-	debugGuiList.push_back(yMouse);
+	guiList.push_back(xMouse);
+	guiList.push_back(yMouse);
 
 	return true;
 }
@@ -112,11 +101,6 @@ update_status M_GUI::PreUpdate(float dt)
 		if ((*it)->GetElementStatus().active) // Do update only if element is active
 			(*it)->Update(mouseHover, focus);
 		
-	}
-	for (it = debugGuiList.begin(); it != debugGuiList.end(); it++)
-	{
-		if ((*it)->GetElementStatus().active) // Do update only if element is active
-			(*it)->Update(mouseHover, focus);
 	}
 	return ret;
 }
@@ -156,13 +140,6 @@ GUIElement * M_GUI::FindMouseHover()
 	GUIElement* ret = nullptr;
 	std::list<GUIElement*>::reverse_iterator it;
 
-	for (it = debugGuiList.rbegin(); it != debugGuiList.rend(); it++)
-	{
-		if ((*it)->CheckMouseOver())
-		{
-			ret = (*it);
-		}
-	}
 	for (it = guiList.rbegin(); it != guiList.rend(); it++)
 	{
 		if ((*it)->CheckMouseOver())
@@ -275,15 +252,6 @@ void M_GUI::Draw()
 	}
 }
 
-void M_GUI::DrawEditor()
-{
-	for (std::list<GUIElement*>::iterator it = editorGuiList.begin(); it != editorGuiList.end(); it++)
-	{
-		if ((*it)->GetElementStatus().active) // Do update only if element is active
-			(*it)->Draw();
-	}
-}
-
 void M_GUI::DrawDebug()
 {
 	//GB_Rectangle<int> rect;
@@ -308,10 +276,6 @@ void M_GUI::DrawDebug()
 	{
 		GB_Rectangle<int> rect = (*it)->GetRectangle();
 		app->render->DrawQuad({ rect.x, rect.y, rect.w, rect.h }, 0, 255, 0, 255, false, false);
-	}
-	for (std::list<GUIElement*>::iterator it = debugGuiList.begin(); it != debugGuiList.end(); it++)
-	{
-		(*it)->Draw();
 	}
 	
 }
@@ -340,6 +304,10 @@ GUIButton * M_GUI::CreateButton(GB_Rectangle<int> _position,
 								GB_Rectangle<int> _clickedSection)
 {
 	GUIButton* button = new GUIButton(_position, _standBySection, _hoverSection, _clickedSection);
+
+	if (button != nullptr)
+		guiList.push_back(button);
+
 	return button;
 }
 
@@ -356,6 +324,10 @@ GUILabel * M_GUI::CreateLabel(GB_Rectangle<int> _position, size _size, const cha
 	}
 	label->SetRectangle(_position);
 	label->SetLocalPos(_position.x, _position.y);
+
+	if (label != nullptr)
+		guiList.push_back(label);
+
 	return label;
 }
 
@@ -364,6 +336,10 @@ GUIImage * M_GUI::CreateImage(GB_Rectangle<int> _position, GB_Rectangle<int> _se
 	GUIImage* image = new GUIImage();
 	image->SetSection(_section);
 	image->SetRectangle(_position);
+
+	if(image != nullptr)
+		guiList.push_back(image);
+
 	return image;
 }
 
@@ -377,3 +353,12 @@ GUIElement * M_GUI::GuiFactory()
 	return nullptr;
 }
 
+GUIAnimatedImage* M_GUI::CreateAnimatedImag(GB_Rectangle<int> _position, Animation* animation)
+{
+	GUIAnimatedImage* ret = new GUIAnimatedImage(animation);
+	ret->SetRectangle(_position);
+
+	if (ret != nullptr)
+		guiList.push_back(ret);
+	return ret;
+}

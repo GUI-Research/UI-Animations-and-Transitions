@@ -49,7 +49,8 @@ enum gui_types
 	GUI_H_SLIDER,
 	GUI_V_SLIDER,
 	GUI_MOUSE_CURSOR,		//done
-	GUI_RECT
+	GUI_RECT,
+	GUI_ANIMATED_IMAGE
 };
 
 class GUIElement

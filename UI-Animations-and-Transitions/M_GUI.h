@@ -11,6 +11,9 @@ class GUIButton;
 class GUILabel;
 class GUIImage;
 class GUIMouse;
+class GUIAnimatedImage;
+
+class Animation;
 
 
 class M_GUI : public Module
@@ -56,13 +59,12 @@ public:
 	GUIImage*	CreateImage(GB_Rectangle<int> _position, GB_Rectangle<int> _section);
 	GUIMouse*	CreateMouse();
 	//GUIImage* createImage();
+	GUIAnimatedImage* CreateAnimatedImag(GB_Rectangle<int> _position, Animation* animation);
 
 	GUIElement* GuiFactory();
 
 public:
 	std::list<GUIElement*> guiList;
-	std::list<GUIElement*> debugGuiList;
-	std::list<GUIElement*> editorGuiList;
 
 private:
 

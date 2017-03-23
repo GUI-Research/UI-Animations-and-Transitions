@@ -30,11 +30,11 @@ public:
 	void SetSpeed(float speed);
 	bool Finished() const;
 	void Reset();
+	GB_Rectangle<int>& GetCurrentFrame();
 
 private:
 	void CleanUp();
 
-	GB_Rectangle<int>& GetCurrentFrame();
 	iPoint& GetCurrentPivot();
 	
 private:

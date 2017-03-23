@@ -130,6 +130,12 @@ update_status M_GUI::Update(float dt)
 
 update_status M_GUI::PostUpdate(float dt)
 {
+	if (app->debug)
+		DrawDebug();
+
+	Draw();
+
+
 	return UPDATE_CONTINUE;
 }
 

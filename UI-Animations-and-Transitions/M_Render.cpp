@@ -205,6 +205,63 @@ bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	return ret;
 }
 
+/**
+	Blit2: Render a texture just like blit but with the capacity of resize the source image.
+
+	Parameters:
+		-SDL_Texture* texture: Texture to render.
+		-GB_Rectangle<int> destinationRectangle: Rectangle that contains the desired position and size of the resulting texture.
+		-GB_Rectangle<int>* section: Rectangle with the section of the source texture you want to blit. If null takes the full size.
+		-...
+*/
+bool M_Render::Blit2(SDL_Texture* texture, GB_Rectangle<int> destinationRectangle, const GB_Rectangle<int>* section = nullptr, float speed = 1.0f, double angle = 0, int pivotX, int pivotY) const
+{
+	bool ret = true;
+
+	uint scale = app->win->GetScale();
+
+	SDL_Rect dRect;
+	dRect.x = (int)(camera.x * speed) + destinationRectangle.x * scale;
+	dRect.y = (int)(camera.y * speed) + destinationRectangle.y * scale;
+
+	SDL_Rect sect;
+
+	if (section == nullptr)
+	{
+		SDL_QueryTexture(texture, nullptr, nullptr, &dRect.w, &dRect.h);
+		sect.x = 0; sect.y = 0;
+		sect.w = dRect.w; sect.h = dRect.h;
+	}
+	else
+	{
+		sect.x = section->x;
+		sect.y = section->y;
+		sect.w = section->w;
+		sect.h = section->h;
+	}
+
+	dRect.w *= scale;
+	dRect.h *= scale;
+
+	SDL_Point* p = nullptr;
+	SDL_Point pivot;
+
+	if (pivotX != INT_MAX && pivotY != INT_MAX)
+	{
+		pivot.x = pivotX;
+		pivot.y = pivotY;
+		p = &pivot;
+	}
+
+	if (SDL_RenderCopyEx(renderer, texture, &sect, &dRect, angle, p, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool useCamera, bool useGameViewPort) const
 {
 	bool ret = true;

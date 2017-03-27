@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="CBezier.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="GB_Rectangle.h" />
     <ClInclude Include="GUIAnimatedImage.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="GUIInputText.h" />
     <ClInclude Include="GUILabel.h" />
     <ClInclude Include="GUIMouse.h" />
+    <ClInclude Include="GUI_Transition.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="Log.h" />

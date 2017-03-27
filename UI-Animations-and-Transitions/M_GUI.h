@@ -6,15 +6,20 @@
 #include "GB_Rectangle.h"
 #include "GUIAutoLabel.h"
 
+#include "j1Timer.h"
+
 class GUIElement;
 class GUIButton;
 class GUILabel;
 class GUIImage;
 class GUIMouse;
 class GUIAnimatedImage;
+class Gui_Transition;
+class CBeizier;
 
 class Animation;
 
+enum CBEZIER_TYPE;
 
 class M_GUI : public Module
 {
@@ -63,6 +68,10 @@ public:
 
 	GUIElement* GuiFactory();
 
+	// Bezier Pointer
+	CBeizier*	GetBezier() { return beiz; };
+
+
 public:
 	std::list<GUIElement*> guiList;
 
@@ -79,7 +88,17 @@ private:
 	GUILabel* xMouse;
 	GUILabel* yMouse;
 
+	CBeizier* beiz = nullptr;
 
+	iPoint	position = {300,600};
+	int		curr_time = 0;
+	Timer	time;
+	bool	transon = false;
+
+	CBEZIER_TYPE	b_type;
+
+	//pulse try
+	Gui_Transition*	pulse = nullptr;
 };
 
 #endif // !__M_GUI_H__

@@ -191,5 +191,11 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp">
       <Filter>Tools\Pugi</Filter>
     </ClInclude>
+    <ClInclude Include="CBezier.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI_Transition.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

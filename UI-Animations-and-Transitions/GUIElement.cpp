@@ -232,6 +232,7 @@ void GUIElement::SetStatusChanged(bool changed)
 {
 	status.statusChanged = changed;
 }
+
 void GUIElement::resize(fPoint newScale)
 {
 	fPoint variation = fPoint(scale.x / newScale.x, scale.y / newScale.y);

@@ -106,6 +106,7 @@ public:
 	void SetLClicked(bool l);
 	void SetRClicked(bool r);
 	void SetStatusChanged(bool changed);
+	
 
 	//Getters & Setters ·········································· END ···················
 

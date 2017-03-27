@@ -14,9 +14,10 @@
 #include "GUIAutoLabel.h"
 #include "GUIMouse.h"
 #include "GUIAnimatedImage.h"
+//
 
-
-
+#include "GUI_Transition.h"
+//
 
 M_GUI::M_GUI(bool startEnabled) : Module(startEnabled)
 {
@@ -29,7 +30,8 @@ M_GUI::~M_GUI()
 
 bool M_GUI::Awake(pugi::xml_node &)
 {
-	
+	beiz = new CBeizier();
+
 	
 	return true;
 }
@@ -72,11 +74,24 @@ bool M_GUI::Start()
 	guiList.push_back(xMouse);
 	guiList.push_back(yMouse);
 
+	//
+	pulse = new Gui_Transition();
+
+	b_type = CBEZIER_TYPE::CB_NO_TYPE;
+
+	pulse->SetOrigin(500, 500);
+	pulse->SetDestiny(500, 500);
+	pulse->SetDuration(2000);
+	pulse->setRect(500, 500, 50, 50);
+	pulse->SetLooping(true);
+
+
 	return true;
 }
 
 update_status M_GUI::PreUpdate(float dt)
 {
+	if(transon) curr_time = time.Read();
 	update_status ret = UPDATE_CONTINUE;
 
 	ManageEvents();
@@ -98,13 +113,60 @@ update_status M_GUI::PreUpdate(float dt)
 			(*it)->Update(mouseHover, focus);
 		
 	}
+
+	//transition
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		b_type = CBEZIER_TYPE::CB_EASE_INOUT_BACK;
+		curr_time = 0;
+		position = { 300,400 };
+		time.Start();
+		transon = true;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		b_type = CBEZIER_TYPE::CB_SLOW_MIDDLE;
+		curr_time = 0;
+		position = { 300,400 };
+		time.Start();
+		transon = true;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		b_type = CBEZIER_TYPE::CB_LINEAL;
+		curr_time = 0;
+		position = { 300,400 };
+		time.Start();
+		transon = true;
+	}
+	
+	if (transon)
+	{
+		if (curr_time <= 1000)
+		{
+			position.y = 400 + beiz->GetActualPoint({ 600,600 }, { 900,600 }, 1000, curr_time, b_type); 
+		}
+		else if (curr_time > 1000)
+		{
+			curr_time = 0;
+			transon = false;
+			position.y = 100;
+		}
+	}
+
+	//pulse
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	{
+		pulse->DoAnimation(PULSE);
+	}
+
 	return ret;
 }
 
 update_status M_GUI::Update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
-
+	
 	return ret;
 }
 
@@ -114,6 +176,18 @@ update_status M_GUI::PostUpdate(float dt)
 		DrawDebug();
 
 	Draw();
+
+	// Draw Bezier
+	beiz->DrawBezierCurve(CBEZIER_TYPE::CB_EASE_INOUT_BACK);
+	beiz->DrawBezierCurve(CBEZIER_TYPE::CB_SLOW_MIDDLE);
+	beiz->DrawBezierCurve(CBEZIER_TYPE::CB_LINEAL);
+	app->render->DrawCircle(300, 100, 5, 255, 150, 200, 255);
+	app->render->DrawCircle(300, 400, 5, 255, 150, 255, 255);
+	app->render->DrawCircle(500, 300, 5, 255, 150, 255, 255);
+	app->render->DrawCircle(position.x, position.y, 5, 255, 150, 0, 255);
+
+	// Draw Pulse
+	if (pulse->TransitionRunning()) pulse->pulse();
 
 
 	return UPDATE_CONTINUE;
@@ -341,9 +415,6 @@ GUIImage * M_GUI::CreateImage(GB_Rectangle<int> _position, GB_Rectangle<int> _se
 
 GUIElement * M_GUI::GuiFactory()
 {
-
-
-
 
 
 	return nullptr;
